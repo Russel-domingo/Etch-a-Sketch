@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etch-a-Sketch</title>
+
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; 
+            margin: 0;
+            background: #fafafa; 
+            flex-direction: column; 
+        }
+
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            width: 640px;
+            height: 640px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .cell {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 11px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            box-sizing:  border-box; 
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wrapper">
+        <button id="button" class="button">change grid</button>
+        <button id="clear" class="clear">Clear</button>
+    
+        <div id="container" class="container">
+
+    </div>
+    
+    </div>
+    <script>
+        const button = document.querySelector('.button');
+        const CELL_ACROSS = 16;
+        const total = CELL_ACROSS * CELL_ACROSS;
+        const cellSize = 640 / CELL_ACROSS;
+        
+        let isDrawing = false;
+
+        const grid = document.querySelector('.container');
+        const btnClear = document.querySelector(".clear");
+
+        for(let i = 0; i < total; i++) {
+            const cell = document.createElement('div');
+
+            cell.className = "cell";
+            cell.style.width = `${cellSize}px`;
+            cell.style.height = `${cellSize}px`;
+            grid.appendChild(cell);
+        }
+
+
+        
+        button.addEventListener('click', function () {
+            grid.innerHTML = "";
+            const newSize = prompt("Enter new grid size (e.g 16 for 16x16):", 16);
+            const size = parseInt(newSize);
+
+            if (size > 0 && size <= 100) {
+                grid.style.width = "640px";
+                grid.style.height = "640px";
+
+                const total = size * size;
+                const cellSize = 640 / size;
+                
+                for (let i = 0; i < total; i++) {
+                    const cell = document.createElement("div");
+                    cell.className = "cell";
+                    cell.style.width = `${cellSize}px`;
+                    cell.style.height = `${cellSize}px`;
+                    grid.appendChild(cell);
+                }
+            }
+
+        });
+
+        
+        grid.addEventListener("mousedown", (e) => {
+            if (e.target.classList.contains("cell")) {
+                isDrawing = true;
+                e.target.style.backgroundColor = "#333";
+
+            }
+        });
+
+        grid.addEventListener("mouseover", (e) => {
+            if(isDrawing && e.target.classList.contains("cell")) {
+                e.target.style.backgroundColor = "#333";
+            }
+        });
+
+        document.addEventListener("mouseup", () => {
+            isDrawing = false;
+        });
+
+        btnClear.addEventListener("click", function () {
+            const cell = document.querySelectorAll(".cell");
+            
+            for (let i = 0; i < cell.length; i++) {
+                cell[i].style.backgroundColor = "#f0f0f0";
+            }
+        });
+    </script>
+</body>
+</html>
